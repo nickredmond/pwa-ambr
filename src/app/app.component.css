@@ -1,0 +1,13 @@
+#ambr-hamburger-menu {
+    z-index: 1000;
+    position: fixed;
+    right: 0;
+    padding-right: 2em;
+    padding-left: 1em;
+    background-color: #343A40;
+}
+
+.hamburger-menu-link {
+    color: white;
+}
+

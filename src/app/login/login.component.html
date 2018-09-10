@@ -1,0 +1,55 @@
+<div>
+  <form>
+    <div *ngIf="authenticationError" class="alert alert-danger" role="alert">{{ authenticationError }}</div>
+    <div class="form-group">
+      <label for="email-address">Email</label>
+      <input id="email" name="email" type="email" class="form-control" placeholder="forexample@ambr.com" 
+        [(ngModel)]="currentUser.emailAddress" (change)="resetErrorMessages()" />
+      <div class="invalid-feedback">{{ invalidEmailMessage }}</div>
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" class="form-control" placeholder="Enter password..." 
+        [(ngModel)]="currentUser.password" (change)="resetErrorMessages()" />
+      <div class="invalid-feedback">{{ invalidPasswordMessage }}</div>
+    </div>
+    <div *ngIf="!isLoggingIn" class="form-group">
+      <label for="password-confirmation">Confirm Password</label>
+      <input id="password-confirmation" name="passwordConfirmation" type="password" class="form-control" placeholder="Re-enter password..." 
+        [(ngModel)]="passwordConfirmation" (change)="resetErrorMessages()" />
+      <div class="invalid-feedback">Passwords do not match.</div>
+    </div>
+    <button type="button" class="btn btn-dark" (click)="submit()">{{ getLoginButtonText() }}</button>
+    <div id="forgot-password-link" class="link-div" *ngIf="isLoggingIn" (click)="forgotPassword()">Forgot password?</div>
+    <div>
+      <div>
+          <span [class]="isLoggingIn ? '' : 'link-div'" (click)="isLoggingIn ? null : toggleForm()">{{ getToggleFormText() }}</span>
+          <span class="link-div" *ngIf="isLoggingIn" (click)="toggleForm()"><strong>Sign up</strong></span>
+      </div>
+    </div>
+  </form>
+</div>
+<!-- 
+<FlexboxLayout class="page">
+    <StackLayout class="form">
+      <StackLayout class="input-field">
+        <TextField class="input" hint="Email" keyboardType="email" autocapitalizationType="none" [(text)]="currentUser.emailAddress"></TextField>
+      </StackLayout>
+      <StackLayout class="input-field">
+        <TextField class="input" [(text)]="currentUser.password"></TextField>
+      </StackLayout>
+      <StackLayout *ngIf="!isLoggingIn" class="input-field">
+        <TextField hint="Confirm password..." [(text)]="passwordConfirmation"></TextField>
+      </StackLayout>
+    
+      <Button [text]="getLoginButtonText()" class="btn btn-primary" (tap)="submit()"></Button>
+      <Label *ngIf="isLoggingIn" text="Forgot password?" (tap)="forgotPassword()"></Label>
+    </StackLayout>
+    
+    <Label (tap)="toggleForm()">
+      <FormattedString>
+        <Span [text]="getToggleFormText()"></Span>
+        <Span *ngIf="isLoggingIn" text="Sign up" class="bold"></Span>
+      </FormattedString>
+    </Label>
+</FlexboxLayout> -->

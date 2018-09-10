@@ -1,5 +1,5 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
+<!-- <div style="text-align:center">
   <h1>
     Welcome to {{ title }}!
   </h1>
@@ -16,5 +16,63 @@
   <li>
     <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
   </li>
-</ul>
+</ul> -->
 
+<div>
+  <div class="pos-f-t">
+    <nav class="navbar navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">ambr</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ambr-hamburger-menu" aria-controls="ambr-hamburger-menu" aria-expanded="false" aria-label="Menu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </nav>
+    <div class="collapse sidenav" id="ambr-hamburger-menu">
+      <div>
+        <a class="hamburger-menu-link" href="#">Auctions</a>
+      </div>
+      <div>
+        <a class="hamburger-menu-link" href="#">Charities</a>
+      </div>
+      <div>
+        <a class="hamburger-menu-link" href="#">Profile</a>
+      </div>
+    </div>
+    <!-- <ul class="navbar-side collapse" id="ambr-hamburger-menu">
+        <li class="navbar-side-item">
+          <a href="#" class="side-link">Signup</a>
+        </li>
+    </ul> -->
+  </div>
+
+  <!-- <style>
+  .navbar-side {
+  height: 100%;
+  width: 25%;
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: 0;
+  list-style: none;
+  border-left: 2px solid #ccc;
+  background-color: #f7f7f9;
+  overflow-y: scroll;
+  z-index: 1000;
+}
+
+   .navbar-side-item {
+  padding: 1.5rem 0;
+  margin: 0;
+  border-bottom: 2px solid #ccc;
+  height: 5rem;
+}
+
+.side-link {
+  padding-left: 2rem;
+}
+
+
+</style> -->
+
+  <!-- Pages -->
+  <router-outlet></router-outlet>
+</div>
