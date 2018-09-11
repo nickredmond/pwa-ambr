@@ -116,7 +116,10 @@ export class AuctionsService {
                 item: {
                     name: "Used Ford F-250 Super Duty",
                     estimatedMarketValue: 9500,
-                    description: "Need to get rid of this truck. It's fared me well, runs well, new tires and brakes. Bought a new truck and am donating this to charity because I'm a philanthropist.",
+                    description: "Need to get rid of this truck. It's fared me well, runs well, new tires and brakes. Bought a new truck and am donating this to charity because I'm a philanthropist." +
+                        "Also I like really long descriptions, so that's what I'm doing here. Just taking up space with a whole bunch of text that doesn't really mean anything but will be used to test the truncating of " +
+                        "really long descriptions like this. Anyway, I'm just going off to the store to get a few items. Do you need anything from the store? You just let me know. I'll be here all week, and I'll be " +
+                        "knee-high on a grasshopper, so y'all come back now with this stuff.",
                     ownerUserId: "5b947e7b2b9c5643d41f0ec2",
                     imageSource: "https://pictures.dealer.com/f/freeholdfordfd/0045/308240c6520292344daa1167f8b4e7ccx.jpg?impolicy=resize&w=650"
                 },

@@ -1,18 +1,53 @@
 <div>
   <h5 id="auction-item-title"><a [routerLink]="['/auctions']">Auctions</a>&nbsp;&gt;&nbsp;{{ auction.item.name }}</h5>
   <div class="row">
-    <div class="col-sm-5">
-        <img id="auction-item-image" [src]="auction.item.imageSource" />
+    <div class="col-sm-5 auction-actions-container">
+        <div class="row">
+            <img id="auction-item-image" [src]="auction.item.imageSource" />
+        </div>
+        <div *ngIf="!isUserAuthorOfAuction" class="row">
+            <button type="button" class="btn btn-dark auction-detail-action-button">
+              <ion-icon name="hand" class="auction-detail-action-icon"></ion-icon><span class="detail-action-text">Bid</span>
+            </button>
+            <button type="button" class="btn btn-success auction-detail-action-button">
+              <ion-icon name="trophy" class="auction-detail-action-icon"></ion-icon><span class="detail-action-text">Donate</span>
+            </button>
+        </div>
+        <div *ngIf="isUserAuthorOfAuction" class="row">
+          <button type="button" class="btn btn-danger auction-detail-action-button" data-toggle="modal" data-target="#confirmCancelAuctionModal">
+            <ion-icon name="close-circle" class="auction-detail-action-icon"></ion-icon><span class="detail-action-text">Cancel Auction</span>
+          </button>
+        </div>
     </div>
     <div class="col-sm-5">
       <p><strong>Description:&nbsp;</strong>{{ auction.item.description }}</p>
       <p><strong>Target Organization:&nbsp;</strong>{{ getTargetCharityName() }}</p>
-      <p><strong>Highest Bid:&nbsp;</strong>{{ getHighestBidValue() }}</p>
+      <p><strong>Highest Bid/Donation:&nbsp;</strong>{{ getHighestBidValue() }}</p>
     </div>
     <!-- TODO: for bid/donate action buttons, only show if user is not author of item -->
 
     <!-- TODO: add "cancel auction" button for authors; make sure to offer refund for all canceled donations (is this all MVP??) -->
     <!-- (cancel auction modal) <Are you sure?> *This action cannot be undone.* Once you cancel the auction, all bidders will be offered a refund of their donations/bids, 
           and you may not create any new auctions for the next 48 hours. -->
+  </div>
+
+  <div id="confirmCancelAuctionModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Are you sure?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p><strong>This action cannot be undone.</strong>&nbsp;Once you cancel the auction, all bidders will be offered a refund of their donations/bids, and you may not create any new auctions for the next 48 hours.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-dark" data-dismiss="modal">Go Back</button>
+          <button type="button" class="btn btn-danger">Cancel Auction</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

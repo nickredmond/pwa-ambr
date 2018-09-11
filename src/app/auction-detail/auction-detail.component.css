@@ -1,9 +1,27 @@
 #auction-item-image {
     max-width: 25rem;
     width: 100%;
+    height: 100%;
     border: 1px solid #ddd;
 }
 
 #auction-item-title {
     margin: 0.5em 0;
+}
+
+.auction-actions-container {
+    margin-left: 0.5rem;
+}
+
+.auction-detail-action-button {
+    min-width: 117px;
+    margin: 0.5rem 0.5rem 0 0;
+}
+.auction-detail-action-icon {
+    margin-right: 0.5rem;
+    font-size: 32px;
+}
+.detail-action-text {
+    position: relative;
+    top: -0.5rem;
 }

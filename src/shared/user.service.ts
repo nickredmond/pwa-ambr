@@ -49,6 +49,7 @@ export class UserService {
             resultStatus = RegistrationStatus.UserCreatedSuccessfully;
             this.setUserToken(messageBody.apiToken);
             this.setUserId(messageBody.userId);
+            this.setBidPermissions(messageBody.bidPermissions);
         } else if (messageBody.isUserAlreadyExists === true) {
             resultStatus = RegistrationStatus.UserAlreadyExists;
         }
@@ -63,6 +64,7 @@ export class UserService {
             resultStatus = LoginStatus.UserLoggedIn;
             this.setUserToken(messageBody.apiToken);
             this.setUserId(messageBody.userId);
+            this.setBidPermissions(messageBody.bidPermissions);
         } else if (messageBody.isUserNotFound === true) {
             resultStatus = LoginStatus.UserNotFound;
         } else if (responseBody.statusCode === 401) {

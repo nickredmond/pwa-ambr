@@ -12,6 +12,7 @@ import { UserService } from '../../shared/user.service';
 export class AuctionDetailComponent implements OnInit {
   public auction: Auction;
   public isErrorRetrievingAuction = false;
+  public isUserAuthorOfAuction: boolean;
 
   constructor(private auctionService: AuctionsService, private userService: UserService, private route: ActivatedRoute) {
   }
@@ -22,12 +23,13 @@ export class AuctionDetailComponent implements OnInit {
       this.auctionService.getAuctionById(auctionId).subscribe(
         auction => {
           this.auction = auction;
+          this.isUserAuthorOfAuction = this.auction.item.ownerUserId === this.userService.getUserId();
         },
         error => {
           this.isErrorRetrievingAuction = true;
         }
       );
-    })
+    });
   }
 
   public getTargetCharityName(): string {
@@ -37,11 +39,11 @@ export class AuctionDetailComponent implements OnInit {
 
   public getHighestBidValue(): string {
     const highestBidAmount = this.auction.highestBid ? this.auction.highestBid.amount.toString() : "0";
-    return this.isUserPermittedToSeeBid() ? highestBidAmount : "???";
+    return this.isUserPermittedToSeeBid() ? highestBidAmount : "??? (place bid or donation to unlock)";
   }
 
   private isUserPermittedToSeeBid(): boolean {
-    let isPermitted = this.auction.item.ownerUserId === this.userService.getUserId();
+    let isPermitted = this.isUserAuthorOfAuction;
 
     if (!isPermitted) {
       const matchingPermissions = this.userService.getBidPermissions().filter(permission => {
