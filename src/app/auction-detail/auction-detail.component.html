@@ -6,10 +6,10 @@
             <img id="auction-item-image" [src]="auction.item.imageSource" />
         </div>
         <div *ngIf="!isUserAuthorOfAuction" class="row">
-            <button type="button" class="btn btn-dark auction-detail-action-button">
+            <button type="button" class="btn btn-dark auction-detail-action-button" (click)="onPlaceBidClick()">
               <ion-icon name="hand" class="auction-detail-action-icon"></ion-icon><span class="detail-action-text">Bid</span>
             </button>
-            <button type="button" class="btn btn-success auction-detail-action-button">
+            <button type="button" class="btn btn-success auction-detail-action-button" (click)="onMakeDonationClick()">
               <ion-icon name="trophy" class="auction-detail-action-icon"></ion-icon><span class="detail-action-text">Donate</span>
             </button>
         </div>

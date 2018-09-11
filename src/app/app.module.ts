@@ -9,11 +9,14 @@ import { UserService } from '../shared/user.service';
 import { HttpClientModule } from '@angular/common/http';
 import { AuctionsService } from '../shared/auctions.service';
 import { AuctionDetailComponent } from './auction-detail/auction-detail.component';
+import { PaymentComponent } from './payment/payment.component';
+import { PaymentService } from '../shared/payment.service';
 
 const appRoutes: Routes = [
   { path: "login", component: LoginComponent },
   { path: "auctions", component: AuctionsComponent },
-  { path: "auction/:id", component: AuctionDetailComponent }
+  { path: "auction/:id", component: AuctionDetailComponent },
+  { path: "auction/:id/:paymentType", component: PaymentComponent }
 ];
 
 @NgModule({
@@ -21,7 +24,8 @@ const appRoutes: Routes = [
     AppComponent,
     LoginComponent,
     AuctionsComponent,
-    AuctionDetailComponent
+    AuctionDetailComponent,
+    PaymentComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +35,8 @@ const appRoutes: Routes = [
   ],
   providers: [
     UserService,
-    AuctionsService
+    AuctionsService,
+    PaymentService
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

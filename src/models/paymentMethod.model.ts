@@ -1,5 +1,5 @@
 export class PaymentMethod {
-    cardBrand: string;
-    lastFourDigits: number;
-    tokenId: string;
+    public cardBrand: string;
+    public lastFourDigits: number;
+    public tokenId: string;
 }

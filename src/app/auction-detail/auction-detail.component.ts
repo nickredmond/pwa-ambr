@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Auction } from 'src/models/auction.model';
 import { AuctionsService } from '../../shared/auctions.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../shared/user.service';
 
 @Component({
@@ -14,7 +14,7 @@ export class AuctionDetailComponent implements OnInit {
   public isErrorRetrievingAuction = false;
   public isUserAuthorOfAuction: boolean;
 
-  constructor(private auctionService: AuctionsService, private userService: UserService, private route: ActivatedRoute) {
+  constructor(private auctionService: AuctionsService, private userService: UserService, private route: ActivatedRoute, private router: Router) {
   }
 
   ngOnInit() {
@@ -42,6 +42,13 @@ export class AuctionDetailComponent implements OnInit {
     return this.isUserPermittedToSeeBid() ? highestBidAmount : "??? (place bid or donation to unlock)";
   }
 
+  public onPlaceBidClick(): void {
+    this.goToPaymentPage("bid");
+  }
+  public onMakeDonationClick(): void {
+    this.goToPaymentPage("donate");
+  }
+
   private isUserPermittedToSeeBid(): boolean {
     let isPermitted = this.isUserAuthorOfAuction;
 
@@ -61,5 +68,9 @@ export class AuctionDetailComponent implements OnInit {
     }
 
     return isPermitted;
+  }
+
+  private goToPaymentPage(paymentType: string): void {
+    this.router.navigate(["auction", this.auction.id, paymentType]);
   }
 }

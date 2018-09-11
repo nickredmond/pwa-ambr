@@ -5,6 +5,7 @@ import { User } from '../../models/user.model';
 import { LoginStatus } from '../../models/loginStatus.enum';
 import { RegistrationStatus } from '../../models/registrationStatus.enum';
 import { Router } from '@angular/router';
+import { PaymentService } from '../../shared/payment.service';
 
 @Component({
   selector: 'app-login',
@@ -29,7 +30,7 @@ export class LoginComponent implements OnInit {
   public currentUser: User = <User>{ emailAddress: "", password: "" };
   public passwordConfirmation: string = "";
 
-  constructor(private userService: UserService, private router: Router) { }
+  constructor(private userService: UserService, private router: Router, private paymentService: PaymentService) { }
 
   ngOnInit() { }
 
@@ -98,7 +99,7 @@ export class LoginComponent implements OnInit {
 
   private processLoginResponse(status: LoginStatus): void {
     if (status === LoginStatus.UserLoggedIn) {
-      this.router.navigate(["auctions"]);
+      this.onUserAuthenticationSuccess();
     } else if (status === LoginStatus.UserNotFound) {
       this.invalidEmailMessage = "No user found with that email address.";
       this.invalidateField("email");
@@ -136,12 +137,17 @@ export class LoginComponent implements OnInit {
 
   private processRegistrationResponse(status: RegistrationStatus): void {
     if (status === RegistrationStatus.UserCreatedSuccessfully) {
-      this.router.navigate(["auctions"]);
+      this.onUserAuthenticationSuccess();
     } else if (status === RegistrationStatus.UserAlreadyExists) {
       this.invalidEmailMessage = "User already exists with that email address.";
     } else {
       this.authenticationError = this.REGISTRATION_ERROR_MESSAGE;
     }
+  }
+
+  private onUserAuthenticationSuccess(): void {
+    this.paymentService.loadPaymentMethods(this.userService.getUserToken());
+    this.router.navigate(["auctions"]);
   }
 
   private invalidateField(fieldId: string): void {

@@ -1,0 +1,67 @@
+<!-- <div id="card-payment-container container">
+    <div class="row">
+        <div class="input-field col-sm-12">
+            <select id="payment-source-select">
+                <option value="" disabled selected>Select payment source</option>
+                <option value="newCard">Enter new card</option>
+            </select>
+        </div>
+    </div>
+
+    <form id="payment-form" class="row" style="display: none;">
+        <div class="row form-row">
+            <div id="card-element"> ,, stripe element will be inserted here
+            </div>
+
+            <div id="card-errors" role="alert"></div>
+        </div>
+        <div class="row" style="padding: 1em;">
+            <p>
+                <input type="checkbox" class="filled-in" id="isNewCardSaved">
+                <label for="isNewCardSaved">Save card for future use</label>
+            </p>
+        </div>
+    </form>
+    
+    <div id="payment-input-container" style="display: none;">
+        <div class="row">
+            <div class="input-field col s12">
+                &dollar;<input id="payment-amount" type="number" placeholder="Enter donation amount" />
+            </div>
+            <span id="missingDonationAmountLabel">Donation amount is required.</span>
+        </div>
+        <div id="donate-button-container" class="row">
+            <div class="col s12 waves-light btn" onclick="onDonateClick()">Donate</div>
+        </div>
+    </div>
+
+    <div id="thetoken"></div> ,, only for testing
+</div> -->
+<div>
+  <h5>
+    <a [routerLink]="['/auctions']">Auctions</a>&nbsp;&gt;&nbsp;
+    <a [routerLink]="['/auction', auctionId]">{{ auctionItemName }}</a>&nbsp;&gt;&nbsp;{{ pageName }}
+  </h5>
+  <form>
+    <div class="form-group">
+      <label for="paymentAmount">{{ paymentAmountLabelText }}</label>
+      <input type="number" id="paymentAmount" class="form-control" placeholder="$0.00" required />
+    </div>
+    <div class="form-group">
+      <label for="paymentMethod">Payment Method</label>
+      <select #paymentMethodSelect class="form-control" id="paymentMethod" (change)="onSelectedPaymentMethodChange()">
+        <option disabled selected>Select Payment Source</option>
+        <option [value]="NEW_CARD_VALUE">Enter new card</option>
+        <option *ngFor="let payment of paymentMethods" [value]="payment.tokenId">
+          {{ getCardDisplayName(payment.cardBrand, payment.lastFourDigits) }}
+        </option>
+      </select>
+    </div>
+    <div [hidden]="!isEnteringNewCard" class="form-group">
+      <label for="card-info">Enter card information:</label>
+      <div id="card-info" #cardInfo></div>
+      <div id="card-errors" role="alert" *ngIf="cardErrorMessage">{{ cardErrorMessage }}</div>
+    </div>
+    <button type="button" class="btn btn-dark" (click)="onPaymentSubmit()">Submit Payment</button>
+  </form>
+</div>

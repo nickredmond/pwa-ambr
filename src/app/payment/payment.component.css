@@ -1,0 +1,9 @@
+#card-errors {
+    color: red;
+    margin-top: 0.5rem;
+}
+
+#card-info {
+    border: 0.1rem solid #ddd;
+    padding: 0.75rem;
+}

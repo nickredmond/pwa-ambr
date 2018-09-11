@@ -90,6 +90,14 @@ export class UserService {
         return permissions;
     }
 
+    public getUserToken(): string {
+        let userToken = this.currentUserToken;
+        if (!userToken) {
+            userToken = window.localStorage.getItem("currentUserToken");
+        }
+        return userToken;
+    }
+
     private setUserId(userId: string): void {
         this.currentUserId = userId;
         window.localStorage.setItem("currentUserId", userId);
@@ -99,13 +107,6 @@ export class UserService {
         window.localStorage.setItem("userBidPermissions", JSON.stringify(permissions));
     }
 
-    private getUserToken(): string {
-        let userToken = this.currentUserToken;
-        if (!userToken) {
-            userToken = window.localStorage.getItem("currentUserToken");
-        }
-        return userToken;
-    }
     private setUserToken(userToken: string): void {
         this.currentUserToken = userToken;
         window.localStorage.setItem("currentUserToken", userToken);
