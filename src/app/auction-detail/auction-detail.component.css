@@ -1,0 +1,9 @@
+#auction-item-image {
+    max-width: 25rem;
+    width: 100%;
+    border: 1px solid #ddd;
+}
+
+#auction-item-title {
+    margin: 0.5em 0;
+}

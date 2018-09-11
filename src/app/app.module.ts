@@ -7,17 +7,21 @@ import { LoginComponent } from './login/login.component';
 import { AuctionsComponent } from './auctions/auctions.component';
 import { UserService } from '../shared/user.service';
 import { HttpClientModule } from '@angular/common/http';
+import { AuctionsService } from '../shared/auctions.service';
+import { AuctionDetailComponent } from './auction-detail/auction-detail.component';
 
 const appRoutes: Routes = [
   { path: "login", component: LoginComponent },
-  { path: "auctions", component: AuctionsComponent }
+  { path: "auctions", component: AuctionsComponent },
+  { path: "auction/:id", component: AuctionDetailComponent }
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    AuctionsComponent
+    AuctionsComponent,
+    AuctionDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -26,7 +30,8 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes)
   ],
   providers: [
-    UserService
+    UserService,
+    AuctionsService
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

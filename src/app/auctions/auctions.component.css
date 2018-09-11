@@ -1,0 +1,28 @@
+.plus-icon {
+    font-weight: bold;
+    margin-right: 0.5em;
+}
+
+.auctions-row {
+    margin-top: 0.5em;
+}
+
+#add-item-button {
+    min-width: 118px;
+}
+
+.auction-item-card {
+    margin: 0 0.5em 0.5em 0.5em;
+    min-width: 18rem;
+    cursor: pointer;
+}
+.auction-item-card:hover {
+    border-color: #7CF1FF;
+    border-width: 2px;
+}
+
+@media only screen and (max-width: 575px) {
+    #add-item-button {
+        margin: 0 1em 1em 1em;
+    }
+}

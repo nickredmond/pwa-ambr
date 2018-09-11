@@ -29,27 +29,3 @@
     </div>
   </form>
 </div>
-<!-- 
-<FlexboxLayout class="page">
-    <StackLayout class="form">
-      <StackLayout class="input-field">
-        <TextField class="input" hint="Email" keyboardType="email" autocapitalizationType="none" [(text)]="currentUser.emailAddress"></TextField>
-      </StackLayout>
-      <StackLayout class="input-field">
-        <TextField class="input" [(text)]="currentUser.password"></TextField>
-      </StackLayout>
-      <StackLayout *ngIf="!isLoggingIn" class="input-field">
-        <TextField hint="Confirm password..." [(text)]="passwordConfirmation"></TextField>
-      </StackLayout>
-    
-      <Button [text]="getLoginButtonText()" class="btn btn-primary" (tap)="submit()"></Button>
-      <Label *ngIf="isLoggingIn" text="Forgot password?" (tap)="forgotPassword()"></Label>
-    </StackLayout>
-    
-    <Label (tap)="toggleForm()">
-      <FormattedString>
-        <Span [text]="getToggleFormText()"></Span>
-        <Span *ngIf="isLoggingIn" text="Sign up" class="bold"></Span>
-      </FormattedString>
-    </Label>
-</FlexboxLayout> -->

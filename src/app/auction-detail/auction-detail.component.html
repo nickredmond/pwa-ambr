@@ -1,0 +1,18 @@
+<div>
+  <h5 id="auction-item-title"><a [routerLink]="['/auctions']">Auctions</a>&nbsp;&gt;&nbsp;{{ auction.item.name }}</h5>
+  <div class="row">
+    <div class="col-sm-5">
+        <img id="auction-item-image" [src]="auction.item.imageSource" />
+    </div>
+    <div class="col-sm-5">
+      <p><strong>Description:&nbsp;</strong>{{ auction.item.description }}</p>
+      <p><strong>Target Organization:&nbsp;</strong>{{ getTargetCharityName() }}</p>
+      <p><strong>Highest Bid:&nbsp;</strong>{{ getHighestBidValue() }}</p>
+    </div>
+    <!-- TODO: for bid/donate action buttons, only show if user is not author of item -->
+
+    <!-- TODO: add "cancel auction" button for authors; make sure to offer refund for all canceled donations (is this all MVP??) -->
+    <!-- (cancel auction modal) <Are you sure?> *This action cannot be undone.* Once you cancel the auction, all bidders will be offered a refund of their donations/bids, 
+          and you may not create any new auctions for the next 48 hours. -->
+  </div>
+</div>

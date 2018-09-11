@@ -1,3 +1,18 @@
-<p>
-  auctions works!
-</p>
+<div class="row auctions-row">
+  <button id="add-item-button" type="button" class="btn btn-dark col-sm-2"><span class="plus-icon">+</span>Add item</button>
+  <div class="input-group col-sm-8">
+    <input type="text" class="form-control" placeholder="Search items..." />
+    <div class="input-group-append">
+      <button type="button" class="btn btn-dark">Search</button>
+    </div>
+  </div>
+</div>
+<div class="row auctions-row">
+  <div *ngFor="let auction of auctions" class="card auction-item-card col-sm-3" (click)="onAuctionClick(auction)">
+    <img class="card-img-top" [src]="auction.item.imageSource" alt="auction item image" />
+    <div class="card-body">
+      <h5 class="card-title">{{ auction.item.name }}</h5>
+      <p class="card-text" [textContent]="getBriefDescription(auction.item.description)"></p>
+    </div>
+  </div>
+</div>
