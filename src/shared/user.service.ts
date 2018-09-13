@@ -6,14 +6,13 @@ import { User } from "../models/user.model";
 import { RegistrationStatus } from "../models/registrationStatus.enum";
 import { LoginStatus } from "../models/loginStatus.enum";
 import { environment } from "../environments/environment";
-import { BidPermission } from "../models/bidPermission.model";
 
 @Injectable()
 export class UserService {
     private paymentMethods: PaymentMethod[];
     private currentUserToken: string; // todo: make token expire
     private currentUserId: string; // todo: implement this, return and set on register/login
-    private currentBidPermissions: BidPermission[] = []; // todo: implement this on back-end too
+    private currentUnlockedAuctionIds: string[] = []; // where user can see highest bid
     // todo: check user token before ever doing an action on the back-end
 
     constructor(private httpClient: HttpClient) {}
@@ -49,7 +48,6 @@ export class UserService {
             resultStatus = RegistrationStatus.UserCreatedSuccessfully;
             this.setUserToken(messageBody.apiToken);
             this.setUserId(messageBody.userId);
-            this.setBidPermissions(messageBody.bidPermissions);
         } else if (messageBody.isUserAlreadyExists === true) {
             resultStatus = RegistrationStatus.UserAlreadyExists;
         }
@@ -64,7 +62,6 @@ export class UserService {
             resultStatus = LoginStatus.UserLoggedIn;
             this.setUserToken(messageBody.apiToken);
             this.setUserId(messageBody.userId);
-            this.setBidPermissions(messageBody.bidPermissions);
         } else if (messageBody.isUserNotFound === true) {
             resultStatus = LoginStatus.UserNotFound;
         } else if (responseBody.statusCode === 401) {
@@ -82,14 +79,6 @@ export class UserService {
         return userId;
     }
 
-    public getBidPermissions(): BidPermission[] {
-        let permissions = this.currentBidPermissions;
-        if (!permissions) {
-            permissions = JSON.parse(window.localStorage.getItem("userBidPermissions"));
-        }
-        return permissions;
-    }
-
     public getUserToken(): string {
         let userToken = this.currentUserToken;
         if (!userToken) {
@@ -101,10 +90,6 @@ export class UserService {
     private setUserId(userId: string): void {
         this.currentUserId = userId;
         window.localStorage.setItem("currentUserId", userId);
-    }
-    private setBidPermissions(permissions: BidPermission[]): void {
-        this.currentBidPermissions = permissions;
-        window.localStorage.setItem("userBidPermissions", JSON.stringify(permissions));
     }
 
     private setUserToken(userToken: string): void {

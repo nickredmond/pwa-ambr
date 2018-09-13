@@ -45,7 +45,9 @@
   <form>
     <div class="form-group">
       <label for="paymentAmount">{{ paymentAmountLabelText }}</label>
-      <input type="number" id="paymentAmount" class="form-control" placeholder="$0.00" required />
+      <input type="number" id="paymentAmount" name="paymentAmount" class="form-control" placeholder="$0.00" [(ngModel)]="paymentAmount"
+        (keypress)="onPaymentAmountInput($event)" (blur)="onBlur()" required />
+      <div *ngIf="isPaymentAmountError" class="text-danger">Please enter a valid number.</div>
     </div>
     <div class="form-group">
       <label for="paymentMethod">Payment Method</label>
@@ -56,11 +58,13 @@
           {{ getCardDisplayName(payment.cardBrand, payment.lastFourDigits) }}
         </option>
       </select>
+      <div *ngIf="isSelectedPaymentMethodBlank" class="text-danger">Payment method is required.</div>
     </div>
     <div [hidden]="!isEnteringNewCard" class="form-group">
       <label for="card-info">Enter card information:</label>
       <div id="card-info" #cardInfo></div>
       <div id="card-errors" role="alert" *ngIf="cardErrorMessage">{{ cardErrorMessage }}</div>
+      <!-- todo: checkbox for saving new payment method -->
     </div>
     <button type="button" class="btn btn-dark" (click)="onPaymentSubmit()">Submit Payment</button>
   </form>

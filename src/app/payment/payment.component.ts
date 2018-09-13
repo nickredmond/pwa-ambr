@@ -20,12 +20,15 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
   public auctionId: string;
   public auctionItemName: string;
   public paymentMethods: PaymentMethod[];
-  public isEnteringNewCard = false;
+  public isEnteringNewCard = false; // todo (v2): add option to "save" card for future use (mark as isSaved or whatever)
+  public paymentAmount: number; 
 
   public cardErrorMessage: string;
+  public isPaymentAmountError = false;
+  public isSelectedPaymentMethodBlank = false;
 
   private paymentType: string;
-  private selectedPaymentMethodId: string;
+  private selectedPaymentMethod: PaymentMethod;
 
   // Stripe element
   private card: any;
@@ -74,6 +77,10 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
     this.card.destroy();
   }
 
+  public onBlur() {
+    this.isPaymentAmountError = !this.paymentAmount;
+  }
+
   public getCardDisplayName(cardBrand: string, lastFourDigits: number): string {
     return cardBrand + " ***" + lastFourDigits;
   }
@@ -84,45 +91,68 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
       this.isEnteringNewCard = true;
     } else {
       this.isEnteringNewCard = false;
-      this.selectedPaymentMethodId = cardIdValue;
+      this.selectedPaymentMethod = this.paymentMethods.find(paymentMethod => {
+        return paymentMethod.tokenId === cardIdValue;
+      });
+    }
+  }
+
+  public onPaymentAmountInput($event) {
+    const character = String.fromCharCode($event.keyCode);
+    const existingValue = this.paymentAmount || "";
+    const newValue = existingValue + character;
+    if (isNaN(parseFloat(newValue)) || this.isHasDecimalPlace(newValue, 3)) {
+      $event.preventDefault();
     }
   }
 
   public async onPaymentSubmit(): Promise<void> {
-    if (true) { // is amount entered
-      await this.processPayment();
-    } else {
+    this.isPaymentAmountError = !this.paymentAmount;
+    this.isSelectedPaymentMethodBlank = !this.selectedPaymentMethod;
 
+    if (this.paymentAmount && this.selectedPaymentMethod) { // todo: is amount entered
+      // todo: prevent more than 2 decimal places in payment amount whilst entering
+      // todo: lock screen whilst processing
+      await this.processPayment();
     }
+  }
+
+  private isHasDecimalPlace(value: string, numberOfPlaces: number) {
+      var pointIndex = value.indexOf('.');
+      return  pointIndex >= 0 && pointIndex < value.length - numberOfPlaces;
   }
 
   private async processPayment(): Promise<void> {
     if (this.isEnteringNewCard) {
-      await this.authorizeNewCard();
-      if (this.selectedPaymentMethodId) {
+      if (await this.authorizeNewCard()) {
         this.submitPaymentToServer();
       }
-    } else if (this.selectedPaymentMethodId && this.selectedPaymentMethodId.length > 0) {
-      this.submitPaymentToServer();
     } else {
-      // no payment method selected
+      this.submitPaymentToServer();
     }
   }
 
   private submitPaymentToServer(): void {
-
+    const userToken = this.userService.getUserToken();
+    this.paymentService.submitPayment(userToken, this.auctionId, this.selectedPaymentMethod, this.paymentAmount, this.paymentType, this.isEnteringNewCard);
   }
 
-  private async authorizeNewCard(): Promise<void> {
-    const { token, error } = await stripe.createToken(this.card);
+  private async authorizeNewCard(): Promise<boolean> {
     // todo: add loading spinner?
+    const { token, error } = await stripe.createToken(this.card);
+    
     if (error) {
       this.cardErrorMessage = "There was a problem authorizing your card.";
     } else {
       this.cardErrorMessage = null;
-      console.log("success! ", token);
-      // todo: set this.selectedPaymentMethodId
+      this.selectedPaymentMethod = <PaymentMethod>{
+        tokenId: token.id,
+        cardBrand: token.card.brand,
+        lastFourDigits: token.card.last4
+      };
     }
+
+    return !error;
   }
 
   private onCardInfoChange({ error }): void {

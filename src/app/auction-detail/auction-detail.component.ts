@@ -12,7 +12,7 @@ import { UserService } from '../../shared/user.service';
 export class AuctionDetailComponent implements OnInit {
   public auction: Auction;
   public isErrorRetrievingAuction = false;
-  public isUserAuthorOfAuction: boolean;
+  public isUserAuthorOfAuction: boolean; // todo: used to cancel donation -- implement cancel, and CHECK to make sure logged in user can do that!
 
   constructor(private auctionService: AuctionsService, private userService: UserService, private route: ActivatedRoute, private router: Router) {
   }
@@ -49,25 +49,9 @@ export class AuctionDetailComponent implements OnInit {
     this.goToPaymentPage("donate");
   }
 
-  private isUserPermittedToSeeBid(): boolean {
-    let isPermitted = this.isUserAuthorOfAuction;
-
-    if (!isPermitted) {
-      const matchingPermissions = this.userService.getBidPermissions().filter(permission => {
-        return permission.auctionId === this.auction.id;
-      });
-      isPermitted = matchingPermissions.filter(permission => {
-        return permission.isAllBidsViewable();
-      }).length > 0;
-
-      if (!isPermitted) {
-        isPermitted = matchingPermissions.filter(permission => {
-          return permission.bidId === this.auction.highestBid.id;
-        }).length > 0;
-      }
-    }
-
-    return isPermitted;
+  private isUserPermittedToSeeBid(): boolean { //todo: BAD, THIS CAN BE JAIL-BROKEN EASILY
+    // todo: userService.requestHighestBid(this.auction.id) // this.getUserToken() in userService
+    return false;
   }
 
   private goToPaymentPage(paymentType: string): void {

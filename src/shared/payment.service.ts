@@ -1,10 +1,14 @@
 import { Injectable } from "@angular/core";
 import { PaymentMethod } from "src/models/paymentMethod.model";
 import { Observable, of } from "rxjs";
+import { PaymentResult } from "src/models/paymentResult.model";
+import { HttpClient } from "@angular/common/http";
 
 @Injectable()
 export class PaymentService {
     private _paymentMethods: PaymentMethod[];
+
+    constructor(private httpClient: HttpClient) {}
 
     public getPaymentMethods(userToken: string): Observable<PaymentMethod[]> {
         let paymentMethods;
@@ -24,6 +28,19 @@ export class PaymentService {
                 this._paymentMethods = paymentMethods;
             }
         );
+    }
+
+    public submitPayment(userToken: string, auctionId: string, paymentMethod: PaymentMethod, paymentAmount: number, bidType: string, isNewPaymentMethod: boolean): Observable<any> {
+        const requestBody = {
+            userToken,
+            auctionId,
+            paymentMethod,
+            paymentAmount,
+            bidType,
+            isNewPaymentMethod
+        };
+
+        return this.httpClient.post("", requestBody); // todo: implement url
     }
 
     private retrievePaymentMethods(userToken: string): Observable<PaymentMethod[]> {
