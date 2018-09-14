@@ -1,0 +1,11 @@
+<div class="modal" bsModal #loadingModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" 
+        tabindex="-1" role="dialog" aria-labelledby="processing-payment-dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content payment-processing-modal-content">
+            <div class="modal-body">
+                <div class="loading-spinner"></div>
+                <span [textContent]="modalText"></span>
+            </div>
+        </div>
+    </div>
+</div>

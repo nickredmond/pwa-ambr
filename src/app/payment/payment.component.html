@@ -37,11 +37,12 @@
 
     <div id="thetoken"></div> ,, only for testing
 </div> -->
-<div>
+<div *ngIf="!isPaymentProcessed">
   <h5>
     <a [routerLink]="['/auctions']">Auctions</a>&nbsp;&gt;&nbsp;
     <a [routerLink]="['/auction', auctionId]">{{ auctionItemName }}</a>&nbsp;&gt;&nbsp;{{ pageName }}
   </h5>
+  <div *ngIf="paymentSubmissionErrorMessage" class="alert alert-danger" role="alert">{{ paymentSubmissionErrorMessage }}</div>
   <form>
     <div class="form-group">
       <label for="paymentAmount">{{ paymentAmountLabelText }}</label>
@@ -69,3 +70,11 @@
     <button type="button" class="btn btn-dark" (click)="onPaymentSubmit()">Submit Payment</button>
   </form>
 </div>
+
+<div *ngIf="isPaymentProcessed" id="successful-payment-screen" class="row">
+    <ion-icon id="successful-payment-icon" name="checkmark-circle"></ion-icon>
+    <div id="successful-payment-description">Payment processed successfully.</div>
+    <button id="successful-payment-button" type="button" class="btn btn-dark">See Results</button>
+</div>
+
+<loading-modal #paymentProcessingModal modalText="Processing payment..."></loading-modal>

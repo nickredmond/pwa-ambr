@@ -1,3 +1,8 @@
+import { HighestBidResponse } from "./highestBidResponse.model";
+
 export class PaymentResult {
-    //todo: implement this; errors, status, receipt info, etc.
+    public isSuccess: boolean;
+    public isCardDeclined: boolean;
+    public isUserMadeHighestBid: boolean;
+    public highestBidDetail: HighestBidResponse;
 }

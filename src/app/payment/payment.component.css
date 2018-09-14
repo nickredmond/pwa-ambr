@@ -7,3 +7,19 @@
     border: 0.1rem solid #ddd;
     padding: 0.75rem;
 }
+
+#successful-payment-screen {
+    text-align: center;
+}
+#successful-payment-icon {
+    font-size: 128px;
+    width: 100%;
+    color: green;
+    margin-top: 1rem;
+}
+#successful-payment-description {
+    width: 100%;
+}
+#successful-payment-button {
+    margin: 2rem auto;
+}

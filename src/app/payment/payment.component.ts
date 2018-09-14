@@ -4,6 +4,8 @@ import { AuctionsService } from 'src/shared/auctions.service';
 import { PaymentService } from '../../shared/payment.service';
 import { UserService } from '../../shared/user.service';
 import { PaymentMethod } from '../../models/paymentMethod.model';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+import { LoadingModalComponent } from '../loading-modal/loading-modal.component';
 
 @Component({
   selector: 'app-payment',
@@ -12,8 +14,10 @@ import { PaymentMethod } from '../../models/paymentMethod.model';
 })
 export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
   public NEW_CARD_VALUE = "--NEW_CARD--";
+  public DEFAULT_SUBMISSION_ERROR_MESSAGE = "Oops! There was a problem submitting your payment.";
   @ViewChild("paymentMethodSelect") paymentMethodSelect: ElementRef;
   @ViewChild("cardInfo") cardInfoInput: ElementRef;
+  @ViewChild("paymentProcessingModal") paymentProcessingModal: LoadingModalComponent;
 
   public paymentAmountLabelText: string;
   public pageName: string;
@@ -21,11 +25,14 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
   public auctionItemName: string;
   public paymentMethods: PaymentMethod[];
   public isEnteringNewCard = false; // todo (v2): add option to "save" card for future use (mark as isSaved or whatever)
-  public paymentAmount: number; 
+  public paymentAmount: string; 
 
   public cardErrorMessage: string;
   public isPaymentAmountError = false;
   public isSelectedPaymentMethodBlank = false;
+  public paymentSubmissionErrorMessage: string;
+
+  public isPaymentProcessed = false;
 
   private paymentType: string;
   private selectedPaymentMethod: PaymentMethod;
@@ -79,6 +86,14 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public onBlur() {
     this.isPaymentAmountError = !this.paymentAmount;
+    if (this.paymentAmount) {
+      const paymentValue = this.paymentAmount.toString();
+      if (paymentValue.indexOf(".") < 0 || !paymentValue.split(".")[1]) {
+        this.paymentAmount += ".00";
+      } else if (this.isOnlyOneDecimalPlace(paymentValue)) {
+        this.paymentAmount += "0";
+      }
+    }
   }
 
   public getCardDisplayName(cardBrand: string, lastFourDigits: number): string {
@@ -107,37 +122,55 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public async onPaymentSubmit(): Promise<void> {
+    if (this.isEnteringNewCard) {
+      await this.authorizeNewCard();
+    }
+
     this.isPaymentAmountError = !this.paymentAmount;
     this.isSelectedPaymentMethodBlank = !this.selectedPaymentMethod;
 
-    if (this.paymentAmount && this.selectedPaymentMethod) { // todo: is amount entered
-      // todo: prevent more than 2 decimal places in payment amount whilst entering
-      // todo: lock screen whilst processing
-      await this.processPayment();
+    if (this.paymentAmount && this.selectedPaymentMethod) {
+      this.paymentProcessingModal.show();
+      await this.submitPaymentToServer();
     }
   }
 
-  private isHasDecimalPlace(value: string, numberOfPlaces: number) {
+  private isHasDecimalPlace(value: string, numberOfPlaces: number): boolean {
       var pointIndex = value.indexOf('.');
       return  pointIndex >= 0 && pointIndex < value.length - numberOfPlaces;
   }
-
-  private async processPayment(): Promise<void> {
-    if (this.isEnteringNewCard) {
-      if (await this.authorizeNewCard()) {
-        this.submitPaymentToServer();
-      }
-    } else {
-      this.submitPaymentToServer();
-    }
+  private isOnlyOneDecimalPlace(value: string): boolean {
+    const valueParitions = value.split(".");
+    return valueParitions[1] && valueParitions[1].length === 1;
   }
 
   private submitPaymentToServer(): void {
     const userToken = this.userService.getUserToken();
-    this.paymentService.submitPayment(userToken, this.auctionId, this.selectedPaymentMethod, this.paymentAmount, this.paymentType, this.isEnteringNewCard);
+    this.paymentSubmissionErrorMessage = null;
+
+    this.paymentService.submitPayment(userToken, this.auctionId, this.selectedPaymentMethod, parseFloat(this.paymentAmount), this.paymentType, this.isEnteringNewCard)
+      .subscribe(
+        response => {
+          const paymentResult = this.paymentService.processPaymentResult(response);
+
+          if (paymentResult.isSuccess) {
+            this.isPaymentProcessed = true;
+          } else if (paymentResult.isCardDeclined) {
+            this.paymentSubmissionErrorMessage = "Your card has been declined.";
+          } else {
+            this.paymentSubmissionErrorMessage = this.DEFAULT_SUBMISSION_ERROR_MESSAGE;
+          }
+
+          this.paymentProcessingModal.hide();
+        },
+        error => {
+          console.log("oh that's rich", error);
+          this.paymentSubmissionErrorMessage = this.DEFAULT_SUBMISSION_ERROR_MESSAGE;
+        }
+      );
   }
 
-  private async authorizeNewCard(): Promise<boolean> {
+  private async authorizeNewCard(): Promise<void> {
     // todo: add loading spinner?
     const { token, error } = await stripe.createToken(this.card);
     
@@ -151,8 +184,6 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
         lastFourDigits: token.card.last4
       };
     }
-
-    return !error;
   }
 
   private onCardInfoChange({ error }): void {
@@ -165,12 +196,12 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private setPaymentType(type: string): void {
-    this.paymentType = type;
-
     if (type === "bid") {
+      this.paymentType = "bid";
       this.paymentAmountLabelText = "Bid Amount";
       this.pageName = "Place Bid";
     } else {
+      this.paymentType = "donation";
       this.paymentAmountLabelText = "Donation Amount";
       this.pageName = "Make Donation";
     }

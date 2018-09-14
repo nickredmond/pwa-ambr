@@ -32,7 +32,7 @@ export class AuctionsService {
     private retrieveAuctions(query: string, skip: number, take: number): Observable<Auction[]> {
         return of(<Auction[]>[
             {
-                id: "5b946934e553f483ccd98dc7",
+                id: "5b99e0dbe553f483ccd98dc8",
                 item: {
                     name: "Xbox One",
                     estimatedMarketValue: 350,
@@ -51,7 +51,7 @@ export class AuctionsService {
                 }
             },
             {
-                id: "5b95f7e1093ede4b0b543ff8",
+                id: "5b99e0dbe553f483ccd98dc8",
                 item: {
                     name: "CandyLand Board Game",
                     estimatedMarketValue: 30,
@@ -66,7 +66,7 @@ export class AuctionsService {
                 }
             },
             {
-                id: "5b947e7b2b9c5643d41f0ec2",
+                id: "5b99e0dbe553f483ccd98dc8",
                 item: {
                     name: "Used Ford F-250 Super Duty",
                     estimatedMarketValue: 9500,
@@ -78,7 +78,7 @@ export class AuctionsService {
                 highestBid: null
             },
             {
-                id: "5b9474762b9c5683cb1f0ec1",
+                id: "5b99e0dbe553f483ccd98dc8",
                 item: {
                     name: "Xbox One",
                     estimatedMarketValue: 350,
@@ -97,7 +97,7 @@ export class AuctionsService {
                 }
             },
             {
-                id: "5b95f7e1093ede4b0b543ff8",
+                id: "5b99e0dbe553f483ccd98dc8",
                 item: {
                     name: "CandyLand Board Game",
                     estimatedMarketValue: 30,
@@ -112,7 +112,7 @@ export class AuctionsService {
                 }
             },
             {
-                id: "5b947e7b2b9c5643d41f0ec2",
+                id: "5b99e0dbe553f483ccd98dc8",
                 item: {
                     name: "Used Ford F-250 Super Duty",
                     estimatedMarketValue: 9500,

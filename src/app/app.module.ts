@@ -11,6 +11,8 @@ import { AuctionsService } from '../shared/auctions.service';
 import { AuctionDetailComponent } from './auction-detail/auction-detail.component';
 import { PaymentComponent } from './payment/payment.component';
 import { PaymentService } from '../shared/payment.service';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { LoadingModalComponent } from './loading-modal/loading-modal.component';
 
 const appRoutes: Routes = [
   { path: "login", component: LoginComponent },
@@ -25,12 +27,14 @@ const appRoutes: Routes = [
     LoginComponent,
     AuctionsComponent,
     AuctionDetailComponent,
-    PaymentComponent
+    PaymentComponent,
+    LoadingModalComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     FormsModule,
+    ModalModule.forRoot(),
     RouterModule.forRoot(appRoutes)
   ],
   providers: [
